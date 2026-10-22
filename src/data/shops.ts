@@ -11,6 +11,10 @@ export interface ShopDef {
   id: string;
   name: string;
   keeper: string; // npc id for the portrait
+  /** opening hours in game minutes [open, close) */
+  hours: [number, number];
+  /** 0 = Monday ... 6 = Sunday */
+  closedWeekdays: number[];
   goods: ShopGood[];
 }
 
@@ -22,24 +26,14 @@ const seedGoods: ShopGood[] = Object.values(CROPS).map((c) => ({
 
 export const SHOPS: Record<string, ShopDef> = {
   general: {
-    id: 'general', name: 'General Store', keeper: 'anna',
+    id: 'general', name: 'General Store', keeper: 'nell',
+    hours: [9 * 60, 17 * 60], closedWeekdays: [2],
     goods: [
       ...seedGoods,
-      { item: 'feed', price: 10 },
-      { item: 'fodder', price: 20 },
+      { item: 'bread', price: 100 },
     ],
   },
-  ranch: {
-    id: 'ranch', name: 'Yodel Ranch', keeper: 'lily',
-    goods: [
-      { item: 'animal_chicken', price: 1500 },
-      { item: 'animal_cow', price: 4000 },
-      { item: 'milker', price: 1800 },
-      { item: 'feed', price: 10 },
-      { item: 'fodder', price: 20 },
-    ],
-  },
-  // blacksmith handled via a special upgrade menu
+  // ranch, poultry farm and blacksmith arrive in later milestones
 };
 
 export const UPGRADE_PRICES = [0, 1000, 3000, 8000]; // price to reach tier 1/2/3

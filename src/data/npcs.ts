@@ -1,85 +1,127 @@
-import { CH } from '../gfx/kenney';
+import { CH } from '../game/rendering/kenney';
+import type { MapId } from '../game/world/mapTypes';
+import type { Season } from './crops';
+
+export interface NpcStop {
+  x: number;
+  y: number;
+  /** game minutes to wait on arrival */
+  wait: number;
+}
 
 export interface NpcDef {
   id: string;
   name: string;
   frame: number;
-  /** waypoints in town tile coords; npc walks the loop, pausing at each */
-  route: { x: number; y: number; wait: number }[];
-  likes: string[]; // item ids that give bonus friendship
+  role: string;
+  birthday: { season: Season; day: number };
+  /** where the NPC is during the day; `route` is a loop of tile waypoints on that map */
+  map: MapId;
+  route: NpcStop[];
+  /** hours present on the map, [from, to) in game minutes */
+  hours: [number, number];
+  loves: string[];
+  likes: string[];
+  dislikes: string[];
   /** dialogue tiers: 0-2 hearts, 3-5 hearts, 6+ hearts */
   lines: string[][];
+  rainLine?: string;
+  lovedLine: string;
   likedLine: string;
   neutralLine: string;
+  dislikedLine: string;
+  birthdayLine: string;
 }
 
 export const NPCS: Record<string, NpcDef> = {
-  anna: {
-    id: 'anna', name: 'Anna', frame: CH.anna,
-    route: [
-      { x: 12, y: 12, wait: 6 }, { x: 15, y: 12, wait: 4 },
-      { x: 15, y: 15, wait: 5 }, { x: 12, y: 15, wait: 4 },
-    ],
-    likes: ['strawberry', 'cabbage', 'milk'],
+  nell: {
+    id: 'nell', name: 'Nell', frame: CH.nell, role: 'General store owner',
+    birthday: { season: 'spring', day: 11 },
+    map: 'store', route: [{ x: 5, y: 3, wait: 999 }], hours: [9 * 60, 17 * 60],
+    loves: ['strawberry', 'dawnbell'], likes: ['cabbage', 'milk', 'egg', 'cucumber'], dislikes: ['onion'],
     lines: [
-      ["Welcome to Mineral Village!", "My family runs the general store.", "Seeds change with the seasons, so check back often!"],
-      ["Oh, hi there! Your farm is really coming along.", "Strawberries are my favorite... just saying!"],
-      ["You're practically family now.", "I always smile when I see you walk in."],
+      ["Welcome to Brookhollow's general store!", 'Seeds change with the seasons, so check back often.', 'We open at nine and close at five. Wednesdays I rest.'],
+      ['Your field is really filling in! I can see it from the hill road.', 'Strawberries... if you ever grow too many, you know where I am.'],
+      ["Honestly, you're the best customer this store has ever had.", 'Stay a while. The kettle is always warm for you.'],
     ],
-    likedLine: "For me?! This is my favorite! Thank you so much!",
-    neutralLine: "Oh, a gift? That's very kind of you.",
+    rainLine: 'Rain is good for the seeds and bad for business!',
+    lovedLine: 'For me?! Oh, this is my absolute favorite!',
+    likedLine: 'How thoughtful! Thank you.',
+    neutralLine: "Oh, a gift? That's kind of you.",
+    dislikedLine: "Ah... I'll find a use for it. Somehow.",
+    birthdayLine: 'You remembered my birthday? That makes my whole year!',
   },
-  greg: {
-    id: 'greg', name: 'Greg', frame: CH.greg,
-    route: [
-      { x: 23, y: 13, wait: 8 }, { x: 25, y: 13, wait: 5 },
-      { x: 25, y: 16, wait: 6 }, { x: 21, y: 16, wait: 5 },
-    ],
-    likes: ['potato', 'corn', 'egg'],
+  bram: {
+    id: 'bram', name: 'Bram', frame: CH.bram, role: 'Blacksmith',
+    birthday: { season: 'fall', day: 3 },
+    map: 'town', route: [{ x: 28, y: 12, wait: 40 }, { x: 34, y: 12, wait: 25 }], hours: [8 * 60, 19 * 60],
+    loves: ['corn'], likes: ['potato', 'egg', 'bread'], dislikes: ['dawnbell', 'sunburst'],
     lines: [
-      ["I'm Greg, the blacksmith.", "Bring me gold and I'll upgrade your tools.", "A good tool makes a good farmer."],
-      ["Your tools are looking well-used. That's a good sign.", "An upgraded hoe tills three squares at once, you know."],
-      ["You've got the hands of a true farmer now.", "It's been an honor keeping your tools sharp, friend."],
+      ["Name's Bram. I keep this village's iron honest.", "Forge is being rebuilt after last winter's chimney fire.", 'Once it is, bring me ore and gold and your tools will sing.'],
+      ["Your tools are worn in the right places. That's a farmer's mark.", 'A better hoe tills more ground per swing. Remember that.'],
+      ["You've earned a place at my anvil, friend.", 'Not many folk outwork a forge fire. You do.'],
     ],
-    likedLine: "Ha! Now that's a fine gift. Much obliged!",
-    neutralLine: "Hm. Thanks, I suppose.",
+    lovedLine: 'Ha! Roasted corn tonight. Much obliged!',
+    likedLine: "Now that's a fine gift.",
+    neutralLine: 'Hm. Thanks, I suppose.',
+    dislikedLine: 'Flowers? For a blacksmith? ...Right.',
+    birthdayLine: "Nobody's marked my birthday in years. Thank you.",
   },
-  maria: {
-    id: 'maria', name: 'Maria', frame: CH.maria,
-    route: [
-      { x: 8, y: 18, wait: 4 }, { x: 17, y: 18, wait: 6 },
-      { x: 17, y: 8, wait: 5 }, { x: 8, y: 8, wait: 6 },
-    ],
-    likes: ['turnip', 'tomato', 'carrot'],
+  wren: {
+    id: 'wren', name: 'Wren', frame: CH.wren, role: 'Librarian',
+    birthday: { season: 'summer', day: 19 },
+    map: 'town',
+    route: [{ x: 13, y: 12, wait: 20 }, { x: 26, y: 12, wait: 15 }, { x: 26, y: 18, wait: 20 }, { x: 13, y: 18, wait: 15 }],
+    hours: [10 * 60, 18 * 60],
+    loves: ['dawnbell', 'sunburst'], likes: ['turnip', 'tomato', 'carrot', 'milk'], dislikes: ['egg'],
     lines: [
-      ["Oh! Hello. I'm Maria.", "I love walking around the village square.", "Have you visited the pond? It's lovely."],
-      ["I saw your farm from the hill. The crops look healthy!", "Fresh vegetables are the best part of village life."],
-      ["Walking with you would be nice someday...", "I mean-- the weather! Lovely weather today!"],
+      ["Oh! Hello. I'm Wren. I look after the library... when it's open.", 'I walk around the fountain to think. It helps.', 'The old farm was famous for its turnips, you know.'],
+      ['I saw your field from the hill. It looks so alive now.', 'I wrote a little poem about your farm. No, you cannot read it.'],
+      ['Walking with you would be nice someday...', 'I mean -- the weather! Lovely weather today!'],
     ],
-    likedLine: "This is so fresh! You grew this? Amazing!",
-    neutralLine: "Thank you! That's sweet of you.",
+    rainLine: 'I love the sound of rain on the fountain.',
+    lovedLine: "Flowers! You grew these? They're beautiful...",
+    likedLine: 'This is so fresh! Thank you!',
+    neutralLine: "Thank you! That's sweet.",
+    dislikedLine: "Oh... um, I don't really eat those. But thank you.",
+    birthdayLine: 'You knew it was my birthday? I... thank you.',
   },
-  lily: {
-    id: 'lily', name: 'Lily', frame: CH.lily,
-    route: [
-      { x: 29, y: 7, wait: 8 }, { x: 32, y: 7, wait: 5 },
-      { x: 32, y: 10, wait: 6 }, { x: 29, y: 10, wait: 4 },
-    ],
-    likes: ['egg', 'milk', 'corn'],
+  juno: {
+    id: 'juno', name: 'Juno', frame: CH.juno, role: 'Rancher',
+    birthday: { season: 'winter', day: 8 },
+    map: 'town',
+    route: [{ x: 22, y: 23, wait: 15 }, { x: 34, y: 23, wait: 20 }, { x: 34, y: 20, wait: 10 }, { x: 22, y: 20, wait: 15 }],
+    hours: [7 * 60, 17 * 60],
+    loves: ['milk', 'pineapple'], likes: ['egg', 'corn', 'carrot', 'turnip'], dislikes: ['pepper'],
     lines: [
-      ["Welcome to the ranch! I'm Lily.", "We sell chickens, cows, and animal supplies.", "Feed your animals every day or they won't produce!"],
-      ["How are your animals doing? Fed and happy, I hope!", "A cow needs fodder every single day. No skipping!"],
-      ["You take such good care of your animals.", "They're lucky to have you. And so are we."],
+      ["I'm Juno! My family's ranch is south of here.", "We'll have chicks and calves to sell once the barn's rebuilt.", 'Animals need feeding every day. No skipping!'],
+      ['You look like someone who could handle a cow or two.', 'Carrots make the horses dance. True story.'],
+      ['You take care of things. Land, people... you just do.', "I'm glad you came to Brookhollow."],
     ],
-    likedLine: "Straight from a happy animal! You're wonderful!",
-    neutralLine: "Aw, thanks! That's kind.",
+    lovedLine: 'No way! This is my favorite thing in the world!',
+    likedLine: 'Straight from your field? Wonderful!',
+    neutralLine: 'Aw, thanks!',
+    dislikedLine: 'Peppers... my one weakness. In the bad way.',
+    birthdayLine: 'A birthday gift? You are the best!',
   },
 };
 
 export const HEART_PER = 100;
 export const MAX_FRIENDSHIP = 1000;
+export const FRIENDSHIP = {
+  talk: 10,
+  loved: 80,
+  liked: 40,
+  neutral: 15,
+  disliked: -30,
+  birthdayMultiplier: 3,
+};
 
 export function heartTier(friendship: number): number {
   const hearts = Math.floor(friendship / HEART_PER);
   return hearts >= 6 ? 2 : hearts >= 3 ? 1 : 0;
+}
+
+export function hearts(friendship: number): number {
+  return Math.min(10, Math.floor(friendship / HEART_PER));
 }
