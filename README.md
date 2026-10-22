@@ -4,9 +4,19 @@
 
 A browser farming-life sim. You inherit a neglected farm in the village of Brookhollow, clear the field, grow seasonal crops, ship the harvest, and get to know the neighbours. On the first day of spring in Year 4, the mayor walks the farm with you.
 
-Play it at [https://brookhollow.dpouya.com](https://brookhollow.dpouya.com).
+Play it at [https://brookhollow.dpouya.com](https://brookhollow.dpouya.com). Source: [github.com/pouyade/Brookhollow](https://github.com/pouyade/Brookhollow).
 
 The repo name is `hmbtn`. The game title in the UI is Brookhollow.
+
+## Screenshots
+
+<p>
+  <img src="docs/screenshots/title.png" alt="Title screen" width="49%">
+  <img src="docs/screenshots/farm.png" alt="The farm on the first morning" width="49%">
+</p>
+<p>
+  <img src="docs/screenshots/town.png" alt="The general store in Brookhollow" width="49%">
+</p>
 
 ## Play
 
@@ -117,9 +127,19 @@ Pushes to `main` build the app and sync `dist/` to S3, which is served at [https
 
 شبیه‌ساز زندگی کشاورزی در مرورگر. مزرعهٔ رهاشده‌ای در روستای بروک‌هالو به تو می‌رسد. کشتزار را پاک کن، محصول فصل را بکار، برداشت را بفروش و با همسایه‌ها آشنا شو. روز اول بهارِ سال چهارم، کدخدا با تو در مزرعه قدم می‌زند.
 
-بازی را اینجا بازی کن: [https://brookhollow.dpouya.com](https://brookhollow.dpouya.com)
+بازی را اینجا بازی کن: [https://brookhollow.dpouya.com](https://brookhollow.dpouya.com). سورس: [github.com/pouyade/Brookhollow](https://github.com/pouyade/Brookhollow).
 
 نام مخزن `hmbtn` است. عنوان بازی در رابط کاربری بروک‌هالو است.
+
+## تصاویر
+
+<p>
+  <img src="docs/screenshots/title.png" alt="صفحهٔ عنوان" width="49%">
+  <img src="docs/screenshots/farm.png" alt="مزرعه در صبح روز اول" width="49%">
+</p>
+<p>
+  <img src="docs/screenshots/town.png" alt="فروشگاه عمومی بروک‌هالو" width="49%">
+</p>
 
 ## اجرا
 

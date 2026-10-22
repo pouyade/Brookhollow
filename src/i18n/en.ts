@@ -104,6 +104,7 @@ export const EN: Record<string, string> = {
   'menu.quit': 'Quit to title',
   'menu.quitWarn': 'Unsaved progress since you last slept will be lost.',
   'menu.quitConfirm': 'Quit',
+  'menu.github': 'View on GitHub',
   'menu.autosave': 'The game also saves automatically every time you sleep (slot {n}).',
   'settings.volume': 'Sound volume',
   'settings.mute': 'Mute all sound',

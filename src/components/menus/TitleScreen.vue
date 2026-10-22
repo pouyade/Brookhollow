@@ -39,6 +39,7 @@ function pickNew(slot: number) {
       </div>
       <div class="mt-5 flex justify-center"><LanguageSwitcher /></div>
       <p class="mt-4 text-xs opacity-60">{{ t('app.credits') }}</p>
+      <a class="mt-1 inline-block text-xs text-wood underline decoration-wood/40 underline-offset-2 hover:text-ink" href="https://github.com/pouyade/Brookhollow" target="_blank" rel="noopener noreferrer">{{ t('menu.github') }}</a>
     </div>
   </div>
 </template>

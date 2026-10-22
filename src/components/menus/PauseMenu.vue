@@ -41,6 +41,7 @@ const CONTROLS: [string, InputAction][] = [
       <button class="btn py-2" @click="openModal({ kind: 'journal' })">{{ t('menu.journal') }}</button>
       <button class="btn py-2" @click="tab = 'settings'">{{ t('menu.settings') }}</button>
       <button class="btn py-2" @click="tab = 'controls'">{{ t('menu.controls') }}</button>
+      <a class="btn btn-ghost py-2 text-center" href="https://github.com/pouyade/Brookhollow" target="_blank" rel="noopener noreferrer">{{ t('menu.github') }}</a>
       <button v-if="!confirmQuit" class="btn btn-ghost py-2" @click="confirmQuit = true">{{ t('menu.quit') }}</button>
       <div v-else class="flex items-center justify-between gap-2 rounded bg-rose-100 p-2">
         <span class="text-sm">{{ t('menu.quitWarn') }}</span>

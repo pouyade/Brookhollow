@@ -103,6 +103,7 @@ export const FA: Record<string, string> = {
   'menu.quit': 'خروج به صفحهٔ اصلی',
   'menu.quitWarn': 'پیشرفت از آخرین خواب ذخیره نشده و از بین می‌رود.',
   'menu.quitConfirm': 'خروج',
+  'menu.github': 'دیدن در گیت‌هاب',
   'menu.autosave': 'بازی هر بار که می‌خوابی خودکار ذخیره می‌شود (جایگاه {n}).',
   'settings.volume': 'بلندی صدا',
   'settings.mute': 'قطع همهٔ صداها',
