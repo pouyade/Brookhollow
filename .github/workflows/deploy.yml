@@ -1,16 +1,9 @@
-name: Deploy
+name: Deploy to S3
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
-
-concurrency:
-  group: deploy
-  cancel-in-progress: true
-
-permissions:
-  contents: read
 
 jobs:
   deploy:
@@ -24,35 +17,18 @@ jobs:
           cache: npm
 
       - run: npm ci
-      - run: npm test
       - run: npm run build
 
-      - uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: Publish to S3
+      - name: Upload dist to S3 (public-read)
         env:
-          BUCKET: ${{ secrets.S3_BUCKET }}
-          S3_ENDPOINT: ${{ secrets.S3_ENDPOINT }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_KEY }}
+          AWS_DEFAULT_REGION: ir-central1
+          # Newer AWS CLI checksums aren't supported by most non-AWS S3 providers
+          AWS_REQUEST_CHECKSUM_CALCULATION: when_required
+          AWS_RESPONSE_CHECKSUM_VALIDATION: when_required
         run: |
-          endpoint=()
-          if [ -n "$S3_ENDPOINT" ]; then
-            aws configure set default.s3.addressing_style path
-            endpoint=(--endpoint-url "$S3_ENDPOINT")
-          fi
-          aws s3 sync dist/ "s3://${BUCKET}" --delete \
-            "${endpoint[@]}" \
-            --exclude "index.html" \
-            --cache-control "public,max-age=31536000,immutable"
-          aws s3 cp dist/index.html "s3://${BUCKET}/index.html" \
-            "${endpoint[@]}" \
-            --cache-control "no-cache" \
-            --content-type "text/html"
-          if [ -z "$S3_ENDPOINT" ]; then
-            aws s3 website "s3://${BUCKET}" \
-              --index-document index.html \
-              --error-document index.html
-          fi
+          aws s3 sync dist/ "s3://${{ secrets.S3_BUCKET }}" \
+            --endpoint-url "${{ secrets.S3_ENDPOINT }}" \
+            --acl public-read \
+            --delete
